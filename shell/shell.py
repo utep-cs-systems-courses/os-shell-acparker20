@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os,sys,re
+
 while True:
     if 'PS1' in os.environ:
         os.write(1, os.environ['PS1']).encode())
@@ -18,9 +20,19 @@ def execute(args):
     if len(args) == 0:
         return
     
-    elif args[0] == "exit":
+    elif args[0].lower() == "exit":
         sys.exit(0)
-
+        
+    elif args[0] == "cd":
+        try:
+            if len(args) == 1:
+                os.chdir("..")
+            else:
+                os.chdir(args[1])
+        except:
+            os.write(1, ("cd %s: No such directory or file" % args[1]).encode())
+            pass
+        
     else:
         rc = os.fork()
         background = True
@@ -38,6 +50,20 @@ def execute(args):
                     os.execve(program, args, os.environ)
                 except FileNotFoundError:
                     pass
+            else:
+                for dir in re.split(":", os.environ['PATH']):
+                    program = "%s%s" % (dir, args[0])
+                    try:
+                        os.execve(program, args, os.environ)
+                    except FileNotFoundError:
+                        pass
+            os.write(2, ("Command not found\n".encode())
+            sys.exit(0)
+        else:
+            if background:
+                     child = os.wait()
+                        
+                    
 
 
 
