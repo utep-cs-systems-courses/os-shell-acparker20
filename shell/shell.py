@@ -91,11 +91,11 @@ def execute(args):
                 redirection(args)
             else:
                 for dir in re.split(":", os.environ['PATH']): #exhausted each directory in the path
-                    program = "%s%s" % (dir, args[0])
+                    program = "%s/%s" % (dir, args[0])
                     try:
                         os.execve(program, args, os.environ) # attempt exec program
                     except FileNotFoundError:
-                     pass
+                        pass
             os.write(2, ("command not found\n").encode())
             sys.exit(0)
 
