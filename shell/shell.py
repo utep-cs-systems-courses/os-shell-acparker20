@@ -20,24 +20,24 @@ def my_getChar():
         if limit == 0:
             return None 
 
-        if next < len(limit)-1: #checks upperbound for space
-            c = chr(limit[next]) #converts from ASCII to char
-            next +=1
-            return c
-        else:
-            return None
+    if next < len(limit)-1: #checks upperbound for space
+        c = chr(limit[next]) #converts from ASCII to char
+        next +=1
+        return c
+    else:
+        return None
 
 def my_getLine():
     global next
     global limit
     line = ""
     char = my_getChar()
-    while(char != '' and char != None): # checks for character to append
+    while(char != "" and char != None): # checks for character to append
         line+= char
         char = my_getChar()
-        next = 0 #reset limit,next after line is finished
-        limit = 0
-        return line
+    next = 0 #reset limit,next after line is finished
+    limit = 0
+    return line
 
 def my_readLines():
     numLines = 0
@@ -55,8 +55,6 @@ def execute(args):
     if len(args) == 0:
         return
     #exit
-    elif args[0].lower == "exit":
-        sys,exit(0)
         #directory change
     elif args[0] == "cd":
         try:
@@ -185,12 +183,19 @@ while True:
         os.write(1, (os.environ['PS1']).encode())
     else: #PS1 var set to $
         os.write(1, ("$ ").encode())
-    args = my_getLine().split()
 
-    if len(args) == 0:
+    rawArgs = my_getLine()
+    
+    if len(rawArgs) == 0:
         break
 
+    args = rawArgs.split() 
+
+    if args[0].lower() == "exit":
+        sys.exit(0)
+        
     execute(args)
+    
     
         
             
